@@ -23,6 +23,8 @@ import transformProps from './transformProps';
 import thumbnail from '../images/thumbnail.png';
 
 export default class InputTextPlugin extends ChartPlugin {
+
+
   /**
    * The constructor is used to pass relevant metadata and callbacks that get
    * registered in respective registries that are used throughout the library
@@ -34,6 +36,7 @@ export default class InputTextPlugin extends ChartPlugin {
    * (pivoting, rolling aggregations, sorting etc) or submitting multiple queries.
    */
   constructor() {
+    console.log(controlPanel, "======controlPanel")
     const metadata = new ChartMetadata({
       description: 'Input Text Plugin',
       name: t('Input Text Plugin'),
@@ -43,9 +46,9 @@ export default class InputTextPlugin extends ChartPlugin {
     super({
       buildQuery,
       controlPanel,
+      transformProps,
       loadChart: () => import('../InputTextPlugin'),
       metadata,
-      transformProps,
     });
   }
 }

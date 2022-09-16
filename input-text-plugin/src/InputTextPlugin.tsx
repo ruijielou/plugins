@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, { useEffect, createRef } from 'react';
-import { styled } from '@superset-ui/core';
-import { InputTextPluginProps, InputTextPluginStylesProps } from './types';
+import React, { createRef } from "react";
+import { styled } from "@superset-ui/core";
+import { InputTextPluginProps, InputTextPluginStylesProps } from "./types";
 
 // The following Styles component is a <div> element, which has been styled using Emotion
 // For docs, visit https://emotion.sh/docs/styled
@@ -26,9 +26,18 @@ import { InputTextPluginProps, InputTextPluginStylesProps } from './types';
 // Theming variables are provided for your use via a ThemeProvider
 // imported from @superset-ui/core. For variables available, please visit
 // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/style/index.ts
+export function hexToRGB(hex:any, alpha = 255) {
+  if (!hex) {
+    return `rgba(0, 0, 0, ${alpha})`;
+  }
+  const { r, g, b, a } = hex;
 
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+
+// background-color: ${({ theme }) => theme.colors.secondary.base};
 const Styles = styled.div<InputTextPluginStylesProps>`
-  background-color: ${({ theme }) => theme.colors.secondary.light2};
   padding: ${({ theme }) => theme.gridUnit * 4}px;
   border-radius: ${({ theme }) => theme.gridUnit * 2}px;
   height: ${({ height }) => height}px;
@@ -38,14 +47,23 @@ const Styles = styled.div<InputTextPluginStylesProps>`
     /* You can use your props to control CSS! */
     margin-top: 0;
     margin-bottom: ${({ theme }) => theme.gridUnit * 3}px;
-    font-size: ${({ theme, headerFontSize }) => theme.typography.sizes[headerFontSize]}px;
-    font-weight: ${({ theme, boldText }) => theme.typography.weights[boldText ? 'bold' : 'normal']};
+    font-size: ${({ theme, headerFontSize }) =>
+      theme.typography.sizes[headerFontSize]}px;
+    color: ${({ headerFontColor }) => hexToRGB(headerFontColor)};
+    font-weight: ${({ theme, boldText }) =>
+      theme.typography.weights[boldText ? "bold" : "normal"]};
+  }
+  .input-text-item {
+    font-size: ${({ theme, headerFontSize }) =>
+      theme.typography.sizes[headerFontSize]}px;
+    color: ${({ headerFontColor }) => hexToRGB(headerFontColor)};
+    font-weight: ${({ theme, boldText }) =>
+      theme.typography.weights[boldText ? "bold" : "normal"]};
   }
 
   pre {
-    height: ${({ theme, headerFontSize, height }) => (
-      height - theme.gridUnit * 12 - theme.typography.sizes[headerFontSize]
-    )}px;
+    height: ${({ theme, headerFontSize, height }) =>
+      height - theme.gridUnit * 12 - theme.typography.sizes[headerFontSize]}px;
   }
 `;
 
@@ -60,29 +78,70 @@ const Styles = styled.div<InputTextPluginStylesProps>`
 export default function InputTextPlugin(props: InputTextPluginProps) {
   // height and width are the height and width of the DOM element as it exists in the dashboard.
   // There is also a `data` prop, which is, of course, your DATA 🎉
-  const { data, height, width } = props;
+  const { data, height, width, renames } = props;
+
+  console.log(props);
 
   const rootElem = createRef<HTMLDivElement>();
+  const mapName:any = {};
+
+  if(renames.length) {
+    const renameMap = renames.split(",");
+    for (let index = 0; index < renameMap.length; index++) {
+      const item = renameMap[index].split('=');
+      mapName[item[0].trim()] = item[1];
+    }
+  }
 
   // Often, you just want to get a hold of the DOM and go nuts.
   // Here, you can do that with createRef, and the useEffect hook.
-  useEffect(() => {
-    const root = rootElem.current as HTMLElement;
-    console.log('Plugin element', root);
-  });
+  // useEffect(() => {
+  //   const root = rootElem.current as HTMLElement;
+  //   console.log("Plugin element", data);
+  //   setDataProp(data)
+  // });
 
-  console.log('Plugin props', props);
+  // const getInner = (item) => {
+  //   for (const key in item) {
+  //     if (Object.prototype.hasOwnProperty.call(item, key)) {
+  //       return (
+  //         <div>
+  //           <input type="text" value={key} />
+  //           <span>{item[key]}</span>
+  //         </div>
+  //       );
+  //     }
+  //   }
+  // };
 
   return (
     <Styles
       ref={rootElem}
       boldText={props.boldText}
       headerFontSize={props.headerFontSize}
+      headerFontColor={props.headerFontColor}
       height={height}
       width={width}
     >
       <h3>{props.headerText}</h3>
-      <pre>${JSON.stringify(data, null, 2)}</pre>
+      {data?.map((item: any) => {
+        return (
+          <>
+            {Object.keys(item).map((pro:any) => {
+              if (typeof item[pro] != "object") {
+                return (
+                  <div className="input-text-item">
+                    <span>{mapName[pro] || pro}</span>:
+                    <span>{item[pro]}</span>
+                  </div>
+                );
+              }else 
+              return ""
+            })}
+          </>
+        );
+      })}
+      {/* <pre>${JSON.stringify(data, null, 2)}</pre> */}
     </Styles>
   );
 }

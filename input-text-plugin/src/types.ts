@@ -22,11 +22,21 @@ export interface InputTextPluginStylesProps {
   height: number;
   width: number;
   headerFontSize: keyof typeof supersetTheme.typography.sizes;
+  headerFontColor: string;
   boldText: boolean;
+}
+interface RenameItem {
+    clause: string;
+    expressionType: string;
+    subject: string | number;
+    operator: string;
+    comparator: string;
 }
 
 interface InputTextPluginCustomizeProps {
   headerText: string;
+  renames: string;
+  // renames: RenameItem[];
 }
 
 export type InputTextPluginQueryFormData = QueryFormData &

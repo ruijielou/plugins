@@ -17,7 +17,13 @@
  * under the License.
  */
 import { t, validateNonEmpty } from '@superset-ui/core';
-import { ControlPanelConfig, sections, sharedControls } from '@superset-ui/chart-controls';
+import {
+  ControlPanelConfig, sharedControls, sections,
+} from '@superset-ui/chart-controls';
+
+console.log(sharedControls, "========sharedControls");
+console.log(sections, "========sections");
+
 
 const config: ControlPanelConfig = {
   /**
@@ -96,7 +102,7 @@ const config: ControlPanelConfig = {
 
   // For control input types, see: superset-frontend/src/explore/components/controls/index.js
   controlPanelSections: [
-    sections.legacyTimeseriesTime,
+    // sections.legacyTimeseriesTime,
     {
       label: t('Query'),
       expanded: true,
@@ -106,33 +112,68 @@ const config: ControlPanelConfig = {
             name: 'cols',
             config: {
               ...sharedControls.groupby,
+              required: true,
               label: t('Columns'),
+              validators: [validateNonEmpty],
               description: t('Columns to group by'),
             },
           },
         ],
-        [
-          {
-            name: 'metrics',
-            config: {
-              ...sharedControls.metrics,
-              // it's possible to add validators to controls if
-              // certain selections/types need to be enforced
-              validators: [validateNonEmpty],
-            },
-          },
-        ],
+        // [
+        //   "metrics"
+        // {
+        //   name: 'metrics',
+        //   config: {
+        //     ...sharedControls.metrics,
+        //     isNew: true,
+        // it's possible to add validators to controls if
+        // certain selections/types need to be enforced
+        // validators: [validateNonEmpty],
+        //   },
+        // },
+        // ],
         ['adhoc_filters'],
+        //行限制
+        // [
+        //   {
+        //     name: 'row_limit',
+        //     config: sharedControls.row_limit,
+        //   },
+        // ],
+
+      ],
+    },
+    {
+      label: t('Options'),
+      expanded: true,
+      tabOverride: 'data',
+      controlSetRows: [
+        // [
+        //   {
+        //     name: `renames`,
+        //     config: {
+        //       ...sharedControls.adhoc_filters,
+        //       label: t('更改名称'),
+        //       description: "显示的更名替换",
+        //     },
+        //   },
+        // ],
+        // customPanel
         [
-          {
-            name: 'row_limit',
-            config: sharedControls.row_limit,
+        {
+          name: 'renames',
+          config: {
+            type: 'TextControl',
+            label: t('更改名称'),
+            renderTrigger: true,
+            description: "图形中的占位符，格式按照'字段a=xxx,字段b=xxx'",
           },
+        },
         ],
       ],
     },
     {
-      label: t('Hello Controls!'),
+      label: t('样式配置'),
       expanded: true,
       controlSetRows: [
         [
@@ -140,10 +181,10 @@ const config: ControlPanelConfig = {
             name: 'header_text',
             config: {
               type: 'TextControl',
-              default: 'Hello, World!',
+              default: '',
               renderTrigger: true,
               // ^ this makes it apply instantaneously, without triggering a "run query" button
-              label: t('Header Text'),
+              label: '标题',
               description: t('The text you want to see in the header'),
             },
           },
@@ -153,7 +194,7 @@ const config: ControlPanelConfig = {
             name: 'bold_text',
             config: {
               type: 'CheckboxControl',
-              label: t('Bold Text'),
+              label: '字体',
               renderTrigger: true,
               default: true,
               description: t('A checkbox to make the '),
@@ -165,7 +206,7 @@ const config: ControlPanelConfig = {
             name: 'header_font_size',
             config: {
               type: 'SelectControl',
-              label: t('Font Size'),
+              label: '字体大小',
               default: 'xl',
               choices: [
                 // [value, label]
@@ -182,6 +223,16 @@ const config: ControlPanelConfig = {
             },
           },
         ],
+        [
+          {
+            name: 'header_font_color',
+            config: {
+              ...sharedControls.color_picker,
+              renderTrigger: true,
+              label: t('Color'),
+            },
+          },
+        ]
       ],
     },
   ],

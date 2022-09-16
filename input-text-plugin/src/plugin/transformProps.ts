@@ -19,6 +19,7 @@
 import { ChartProps, TimeseriesDataRecord } from '@superset-ui/core';
 
 export default function transformProps(chartProps: ChartProps) {
+  
   /**
    * This function is called after a successful response has been
    * received from the chart data endpoint, and is used to transform
@@ -49,15 +50,12 @@ export default function transformProps(chartProps: ChartProps) {
    * be seen until restarting the development server.
    */
   const { width, height, formData, queriesData } = chartProps;
-  const { boldText, headerFontSize, headerText } = formData;
+  const { boldText, headerFontSize, headerText, renames,headerFontColor } = formData;
   const data = queriesData[0].data as TimeseriesDataRecord[];
-
-  console.log('formData via TransformProps.ts', formData);
 
   return {
     width,
     height,
-
     data: data.map(item => ({
       ...item,
       // convert epoch to native Date
@@ -67,6 +65,10 @@ export default function transformProps(chartProps: ChartProps) {
     // and now your control data, manipulated as needed, and passed through as props!
     boldText,
     headerFontSize,
+    headerFontColor,
     headerText,
+    renames
+    // 如果需要参数暴露给组件内渲染，在这儿添加进去 组件页面可以拿到
+    // customPanel
   };
 }
