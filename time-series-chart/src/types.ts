@@ -16,19 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import buildQuery from '../../src/plugin/buildQuery';
+import { QueryFormData, supersetTheme, TimeseriesDataRecord } from '@superset-ui/core';
 
-describe('ChartTemplate buildQuery', () => {
-  const formData = {
-    datasource: '5__table',
-    granularity_sqla: 'ds',
-    series: 'foo',
-    viz_type: 'my_chart',
+export interface TimeSeriesChartStylesProps {
+  height: number;
+  width: number;
+  headerFontSize: keyof typeof supersetTheme.typography.sizes;
+  boldText: boolean;
+}
+
+interface TimeSeriesChartCustomizeProps {
+  headerText: string;
+}
+
+export type TimeSeriesChartQueryFormData = QueryFormData &
+  TimeSeriesChartStylesProps &
+  TimeSeriesChartCustomizeProps;
+
+export type TimeSeriesChartProps = TimeSeriesChartStylesProps &
+  TimeSeriesChartCustomizeProps & {
+    data: TimeseriesDataRecord[];
+    // add typing here for the props you pass in from transformProps.ts!
   };
-
-  it('should build groupby with series in form data', () => {
-    const queryContext = buildQuery(formData);
-    const [query] = queryContext.queries;
-    expect(query.columns).toEqual(['foo']);
-  });
-});

@@ -1,7 +1,7 @@
 {
-  "name": "chart-template",
+  "name": "regular-chart",
   "version": "0.1.0",
-  "description": "Chart Template",
+  "description": "regular-chart",
   "sideEffects": false,
   "main": "lib/index.js",
   "module": "esm/index.js",

@@ -16,12 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-// eslint-disable-next-line import/prefer-default-export
-export { default as ChartTemplate } from './plugin';
-/**
- * Note: this file exports the default export from ChartTemplate.tsx.
- * If you want to export multiple visualization modules, you will need to
- * either add additional plugin folders (similar in structure to ./plugin)
- * OR export multiple instances of `ChartPlugin` extensions in ./plugin/index.ts
- * which in turn load exports from ChartTemplate.tsx
- */
+import { QueryFormData, supersetTheme, TimeseriesDataRecord } from '@superset-ui/core';
+
+export interface RegularChartStylesProps {
+  height: number;
+  width: number;
+  headerFontSize: keyof typeof supersetTheme.typography.sizes;
+  boldText: boolean;
+}
+
+interface RegularChartCustomizeProps {
+  headerText: string;
+}
+
+export type RegularChartQueryFormData = QueryFormData &
+  RegularChartStylesProps &
+  RegularChartCustomizeProps;
+
+export type RegularChartProps = RegularChartStylesProps &
+  RegularChartCustomizeProps & {
+    data: TimeseriesDataRecord[];
+    // add typing here for the props you pass in from transformProps.ts!
+  };

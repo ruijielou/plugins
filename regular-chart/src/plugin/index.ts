@@ -22,7 +22,7 @@ import controlPanel from './controlPanel';
 import transformProps from './transformProps';
 import thumbnail from '../images/thumbnail.png';
 
-export default class ChartTemplate extends ChartPlugin {
+export default class RegularChart extends ChartPlugin {
   /**
    * The constructor is used to pass relevant metadata and callbacks that get
    * registered in respective registries that are used throughout the library
@@ -35,15 +35,15 @@ export default class ChartTemplate extends ChartPlugin {
    */
   constructor() {
     const metadata = new ChartMetadata({
-      description: 'Chart Template',
-      name: t('Chart Template'),
+      description: 'regular-chart',
+      name: t('regular-chart'),
       thumbnail,
     });
 
     super({
       buildQuery,
       controlPanel,
-      loadChart: () => import('../ChartTemplate'),
+      loadChart: () => import('../RegularChart'),
       metadata,
       transformProps,
     });
