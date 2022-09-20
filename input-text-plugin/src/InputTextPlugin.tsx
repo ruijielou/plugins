@@ -85,8 +85,10 @@ export default function InputTextPlugin(props: InputTextPluginProps) {
   const rootElem = createRef<HTMLDivElement>();
   const mapName:any = {};
 
-  if(renames.length) {
+  if(renames && renames.length > 0) {
+    debugger
     const renameMap = renames.split(",");
+
     for (let index = 0; index < renameMap.length; index++) {
       const item = renameMap[index].split('=');
       mapName[item[0].trim()] = item[1];

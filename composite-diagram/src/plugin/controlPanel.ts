@@ -17,10 +17,7 @@
  * under the License.
  */
 import { t, validateNonEmpty } from '@superset-ui/core';
-import {
-  ControlPanelConfig, sharedControls, sections,
-} from '@superset-ui/chart-controls';
-
+import { ControlPanelConfig, sections, sharedControls } from '@superset-ui/chart-controls';
 
 const config: ControlPanelConfig = {
   /**
@@ -99,7 +96,7 @@ const config: ControlPanelConfig = {
 
   // For control input types, see: superset-frontend/src/explore/components/controls/index.js
   controlPanelSections: [
-    // sections.legacyTimeseriesTime,
+    sections.legacyTimeseriesTime,
     {
       label: t('Query'),
       expanded: true,
@@ -109,87 +106,33 @@ const config: ControlPanelConfig = {
             name: 'cols',
             config: {
               ...sharedControls.groupby,
-              required: true,
               label: t('Columns'),
-              validators: [validateNonEmpty],
               description: t('Columns to group by'),
             },
           },
         ],
-        // [
-        //   "metrics"
-        // {
-        //   name: 'metrics',
-        //   config: {
-        //     ...sharedControls.metrics,
-        //     isNew: true,
-        // it's possible to add validators to controls if
-        // certain selections/types need to be enforced
-        // validators: [validateNonEmpty],
-        //   },
-        // },
-        // ],
-        // ['datasource'],没效果
-        // ['viz_type'], 图形的选择按钮
-        // ['metric_2'],右轴指标
-        // ['linear_color_scheme'],线性颜色方案
-        // ['secondary_metric'],
-        // ['groupby'],
-        // ['columns'],
-        // ['limit'],
-        // ['orderby'],
-        // ['series'],
-        // ['entity'],
-        // ['x'],
-        // ['y'],
-        // ['size'],
-        // ['y_axis_format'],
-        // ['x_axis_time_format'],
-        ['adhoc_filters'],
-        // ['color_scheme'],
-        // ['series_limit_metric'],
-        // ['legacy_order_by'],
-        //行限制
-        // [
-        //   {
-        //     name: 'row_limit',
-        //     config: sharedControls.row_limit,
-        //   },
-        // ],
-
-      ],
-    },
-    {
-      label: t('Options'),
-      expanded: true,
-      tabOverride: 'data',
-      controlSetRows: [
-        // [
-        //   {
-        //     name: `renames`,
-        //     config: {
-        //       ...sharedControls.adhoc_filters,
-        //       label: t('更改名称'),
-        //       description: "显示的更名替换",
-        //     },
-        //   },
-        // ],
-        // customPanel
         [
-        {
-          name: 'renames',
-          config: {
-            type: 'TextControl',
-            label: t('更改名称'),
-            renderTrigger: true,
-            description: "图形中的占位符，格式按照'字段a=xxx,字段b=xxx'",
+          {
+            name: 'metrics',
+            config: {
+              ...sharedControls.metrics,
+              // it's possible to add validators to controls if
+              // certain selections/types need to be enforced
+              validators: [validateNonEmpty],
+            },
           },
-        },
+        ],
+        ['adhoc_filters'],
+        [
+          {
+            name: 'row_limit',
+            config: sharedControls.row_limit,
+          },
         ],
       ],
     },
     {
-      label: t('样式配置'),
+      label: t('Hello Controls!'),
       expanded: true,
       controlSetRows: [
         [
@@ -197,10 +140,10 @@ const config: ControlPanelConfig = {
             name: 'header_text',
             config: {
               type: 'TextControl',
-              default: '',
+              default: 'Hello, World!',
               renderTrigger: true,
               // ^ this makes it apply instantaneously, without triggering a "run query" button
-              label: '标题',
+              label: t('Header Text'),
               description: t('The text you want to see in the header'),
             },
           },
@@ -210,7 +153,7 @@ const config: ControlPanelConfig = {
             name: 'bold_text',
             config: {
               type: 'CheckboxControl',
-              label: '字体',
+              label: t('Bold Text'),
               renderTrigger: true,
               default: true,
               description: t('A checkbox to make the '),
@@ -222,7 +165,7 @@ const config: ControlPanelConfig = {
             name: 'header_font_size',
             config: {
               type: 'SelectControl',
-              label: '字体大小',
+              label: t('Font Size'),
               default: 'xl',
               choices: [
                 // [value, label]
@@ -239,16 +182,6 @@ const config: ControlPanelConfig = {
             },
           },
         ],
-        [
-          {
-            name: 'header_font_color',
-            config: {
-              ...sharedControls.color_picker,
-              renderTrigger: true,
-              label: t('Color'),
-            },
-          },
-        ]
       ],
     },
   ],
